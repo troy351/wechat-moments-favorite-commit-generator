@@ -1,3 +1,99 @@
-<h1>
-  {{title}}
-</h1>
+<div class="container-fluid">
+  <h1 class="text-center" *ngIf="step>0">第{{step}}步</h1>
+  <div class="row">
+    <div [ngSwitch]="step" class="col-xs-12">
+      <div *ngSwitchCase="0" class="welcome">
+        <h1>朋友圈点赞评论截图生成工具</h1>
+        <ul *ngIf="isiPhone">
+          <li>请选择你所使用的 iPhone 型号</li>
+          <!--<li><label><input type="radio" name="device" [value]="0" (change)="deviceSwitch()" [(ngModel)]="deviceType" [disabled]="true">5 / 5c / 5s / SE (开发中)</label></li>-->
+          <li>
+            <label><input type="radio" name="device" [value]="1" (change)="deviceSwitch()" [(ngModel)]="deviceType">6 / 6s / 7</label>
+          </li>
+          <li>
+            <label><input type="radio" name="device" [value]="2" (change)="deviceSwitch()" [(ngModel)]="deviceType" [disabled]="true">6 / 6s / 7 Plus (开发中)</label>
+          </li>
+        </ul>
+        <p *ngIf="!isiPhone" class="not-iphone">抱歉，该工具只支持iPhone</p>
+        <p class="copyright">Made by Troy</p>
+      </div>
+      <div *ngSwitchCase="1">
+        <p class="instruction">选择一个朋友圈的屏幕截图</p>
+        <p>要求：</p>
+        <ol>
+          <li>要修改的朋友圈内容必须和下一条朋友圈的分割线清晰可见</li>
+          <li>请确保增加完所需的内容后上述分割线仍在视野范围内，即所要操作的朋友圈应尽可能处于屏幕上方</li>
+          <li>请确保所要操作的朋友圈不存在赞和评论</li>
+        </ol>
+        <form class="form-inline">
+          <label class="control-label" for="image">选择截屏图片</label>
+          <div class="form-group">
+            <div class="col-xs-8"><input #file type="file" accept="image/*" id="image"></div>
+            <div class="col-xs-4">
+              <input type="button" (click)="uploadImage(file.files)" value="upload" class="btn btn-default"></div>
+          </div>
+        </form>
+      </div>
+      <div *ngSwitchCase="2">
+        <div class="row">
+          <canvas id="gutterCanvas" [width]="config.width" [height]="config.height"></canvas>
+        </div>
+        <p>请选择所需要编辑的朋友圈（取上下分割线之间的数字)</p>
+        <form class="form-inline gutter-form">
+          <label *ngFor="let g of gutters;let i=index">
+            <input type="radio" name="gutter" [value]="i" [(ngModel)]="gutterIndex" (change)="nextAccess=true">{{i+1}}
+          </label>
+        </form>
+      </div>
+      <div *ngSwitchCase="3">
+        <h2>赞 (支持emoji)</h2>
+        <div class="row list" *ngFor="let obj of favorites | values;let i=index">
+          <div class="col-xs-9">
+            <input type="text" class="form-control" [(ngModel)]="obj.name" placeholder="昵称 / 备注">
+          </div>
+          <div class="col-xs-3 text-center">
+            <a class="btn btn-danger" (click)="removeFavorite(i)">x</a>
+          </div>
+        </div>
+        <div class="row list">
+          <div class="col-xs-12 text-center">
+            <a class="btn btn-success" (click)="addFavorite()">+</a>
+          </div>
+        </div>
+        <h2>评论 (回复人为空则表示正常评论)</h2>
+        <div class="row list commit-list" *ngFor="let obj of commits | values;let i=index">
+          <div class="col-xs-6">
+            <input type="text" class="form-control" [(ngModel)]="obj.from" placeholder="评论人">
+          </div>
+          <div class="col-xs-6">
+            <input type="text" class="form-control" [(ngModel)]="obj.to" placeholder="回复人">
+          </div>
+          <div class="col-xs-9">
+            <input type="text" class="form-control" [(ngModel)]="obj.content" placeholder="内容">
+          </div>
+          <div class="col-xs-3 text-center">
+            <a class="btn btn-danger" (click)="removeCommit(i)">x</a>
+          </div>
+        </div>
+        <div class="row list">
+          <div class="col-xs-12 text-center">
+            <a class="btn btn-success" (click)="addCommit()">+</a>
+          </div>
+        </div>
+      </div>
+      <div *ngSwitchCase="4">
+        <div class="row">
+          <p>长按图片保存到相册</p>
+          <p *ngIf="rendering">渲染中，请耐心等待</p>
+          <canvas id="renderCanvas" [width]="config.width" [height]="config.height" [hidden]="true"></canvas>
+          <img [width]="config.width" [height]="config.height">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-toolbar" *ngIf="buttonAllow">
+    <button (click)="prevStep()" [disabled]="!prevAccess" class="btn btn-primary">prev step</button>
+    <button (click)="nextStep()" [disabled]="!nextAccess" class="btn btn-primary">next step</button>
+  </div>
+</div>
