@@ -30,7 +30,7 @@
           <div class="form-group">
             <div class="col-xs-8"><input #file type="file" accept="image/*" id="image"></div>
             <div class="col-xs-4">
-              <input type="button" (click)="uploadImage(file.files)" value="upload" class="btn btn-default"></div>
+              <input type="button" (click)="uploadImage(file.files)" value="上传" class="btn btn-default"></div>
           </div>
         </form>
       </div>
@@ -83,7 +83,7 @@
       </div>
       <div *ngSwitchCase="4">
         <div class="row">
-          <p>长按图片保存到相册</p>
+          <p class="info">长按图片保存到相册</p>
           <p *ngIf="rendering">渲染中，请耐心等待</p>
           <canvas id="renderCanvas" [width]="config.width" [height]="config.height" [hidden]="true"></canvas>
           <img [width]="config.width" [height]="config.height">
@@ -93,7 +93,7 @@
     </div>
   </div>
   <div class="btn-toolbar" *ngIf="buttonAllow">
-    <button (click)="prevStep()" [disabled]="!prevAccess" class="btn btn-primary">prev step</button>
-    <button (click)="nextStep()" [disabled]="!nextAccess" class="btn btn-primary">next step</button>
+    <button (click)="prevStep()" [disabled]="!prevAccess" class="btn btn-primary">上一步</button>
+    <button (click)="nextStep()" [disabled]="!nextAccess" class="btn btn-primary">下一步</button>
   </div>
 </div>

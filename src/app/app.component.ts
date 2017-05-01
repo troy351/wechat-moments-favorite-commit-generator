@@ -46,27 +46,6 @@ export class AppComponent {
     this.favorites = [];
     this.commits = [];
     this.buttonAllow = false;
-    // this.favorites = ['troy', '茅静', '陈米嘉', '陈立华', '娄晓烽', '朱柠', '田奇超'].map(n => {
-    //   return {name: n}
-    // });
-    this.favorites = ['苏子娟', '杨逸飞', '潘晨', '茅静', '何平', '黄炜', '周靖沅', '陈立华'].map(n => {
-      return {name: n}
-    });
-    this.commits = [
-      {from: '谢瀚森', to: '', content: '苟。。。'},
-      {from: 'troy', to: '谢瀚森', content: '？'},
-      {from: '陈添泽', to: '', content: '苟富贵 勿相忘'},
-      {from: '谢瀚森', to: '陈添泽', content: '是的。'},
-      {from: '李灏', to: '', content: '加油撒加油撒加油撒加油撒加油撒加油撒加油撒加油撒加油撒加'},
-      {from: '李璇', to: '', content: '果然大神'},
-      {from: 'troy', to: '陈添泽', content: '说好的念诗呢'},
-      {from: '陈米嘉', to: '', content: '苟富贵 勿相忘'},
-      {from: '吴紫微', to: '', content: '厉害了'},
-      {from: '周靖沅', to: '', content: '最强超姐姐'},
-      {from: '陈立华', to: '', content: '膜'},
-      {from: '娄晓烽', to: '', content: '苟富贵 勿相忘'},
-      {from: '范婷', to: '', content: '苟富贵 勿相忘'},
-    ];
     this.gutters = [];
 
     // load heart image
@@ -192,7 +171,7 @@ export class AppComponent {
     reader.addEventListener('load', (file: ProgressEvent) => {
       this.image = new Image();
       this.image.src = (<FileReader>file.target).result;
-      // this.image = img.src;
+
       this.image.addEventListener('load', () => {
         if (this.image.width !== this.config.width || this.image.height !== this.config.height) {
           alert('请选择正确的屏幕截图文件');
@@ -291,7 +270,7 @@ export class AppComponent {
     // top point
     ctx.lineTo(this.config.areaMarginLeft + this.config.areaTriangleLeft + this.config.areaTriangleWidth / 2,
       this.gutters[this.gutterIndex] - this.config.gutterMarginTop + this.config.areaMarginTop - this.config.areaTriangleHeight);
-    ctx.closePath(); // draws last line of the triangle
+    ctx.closePath();
     ctx.fill();
 
     /* draw background */
@@ -320,7 +299,6 @@ export class AppComponent {
       if (item.name === '') return;
 
       ctx.fillStyle = '#586c93';
-      // ctx.font = `${this.config.fontSize}px SanFranciscoText-Medium, PingFangSC-Regular, -apple-system`;
       ctx.font = `500 ${this.config.fontSize}px -apple-system`;
 
       // draw name/nickname
@@ -353,7 +331,6 @@ export class AppComponent {
       // draw comma
       if (index < this.favorites.length - 1) {
         ctx.fillStyle = 'black';
-        // ctx.font = `${this.config.commaSize}px SanFranciscoText-Medium`;
         ctx.font = `${this.config.commaSize}px -apple-system`;
         ctx.fillText(',', left, this.currentBaseline);
         left += this.config.commaGutterAfter;
@@ -385,7 +362,6 @@ export class AppComponent {
     const leftEdge = this.config.areaMarginLeft + this.config.areaPaddingLeft - this.config.commitOffsetLeft;
     const rightEdge = this.config.width - this.config.areaPaddingRight - this.config.areaMarginRight;
     let left = leftEdge;
-    // this.currentBaseline = this.gutters[this.gutterIndex] - this.config.gutterMarginTop + this.config.areaMarginTop + this.config.areaPaddingTop;
 
     const drawText = text => {
       for (let i = 0; i < text.length; i++) {
@@ -415,14 +391,12 @@ export class AppComponent {
       }
     };
 
-    // ctx.font = `${this.config.fontSize}px -apple-system`;
     // draw commits
     this.commits.forEach((item, index) => {
       if (item.from === '') return;
 
       ctx.fillStyle = '#586c93';
       ctx.font = `500 ${this.config.fontSize}px -apple-system`;
-      // ctx.font = `${this.config.fontSize}px SanFranciscoText-Medium, PingFangSC-Regular, -apple-system`;
       drawText(item.from);
 
       if (item.to !== '') {
@@ -455,8 +429,6 @@ export class AppComponent {
       this.currentBaseline += this.config.commitLineHeight;
       if (index === 0) this.currentBaseline += this.config.commitFirstLineOffset;
     });
-
-    this.rendering = false;
   }
 
   private renderPatch(): void {
@@ -479,5 +451,7 @@ export class AppComponent {
     );
 
     document.getElementsByTagName('img')[0].src = ctx.canvas.toDataURL('image/jpeg', 1);
+
+    this.rendering = false;
   }
 }
