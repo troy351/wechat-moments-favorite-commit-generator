@@ -10,19 +10,19 @@ import {isNullOrUndefined} from "util";
 export class AppComponent {
   step: number;
   config: {
-    width: number, height: number, header: number,
-    fontSize: number, lineHeight: number,
+    width: number, height: number, devicePixelRatio: number,
+    header: number, fontSize: number, lineHeight: number,
     commaSize: number, commaGutterBefore: number, commaGutterAfter: number,
     gutterHeight: number, gutterFontSize: number, gutterMarginTop: number,
     areaWidth: number, areaMarginLeft: number, areaMarginTop: number, areaMarginRight: number, areaMarginBottom: number,
     areaPaddingLeft: number, areaPaddingRight: number, areaPaddingTop: number, areaPaddingBottom: number,
     areaTriangleLeft: number, areaTriangleWidth: number, areaTriangleHeight: number,
-    areaHeartWidth: number, areaHeartMarginTop: number,
+    areaHeartSrc: string, areaHeartWidth: number,
     areaSeparatorMarginTop: number, areaSeparatorOffsetBottom: number, areaSeparatorHeight: number, areaSeparatorColors: string[],
     favoriteOnlyPaddingBottom: number,
     commitOffsetLeft: number, commitLineHeight: number, commitFirstLineOffset: number, commitSpaceWidth: number,
     colonSize: number, colonGutterBefore: number, colonGutterAfter: number,
-    replyGutterBefore: number, replyGutterAfter: number,
+    replyText: string, replyGutterBefore: number, replyGutterAfter: number,
   };
   nextAccess: boolean;
   prevAccess: boolean;
@@ -35,78 +35,20 @@ export class AppComponent {
   currentBaseline: number;
   heartImage: HTMLImageElement;
   rendering: boolean;
-  buttonAllow: boolean;
   deviceType: number;
+  language: number;
   isiPhone: boolean;
 
   constructor() {
     this.step = 0;
     this.nextAccess = true;
-    this.prevAccess = true;
+    this.prevAccess = false;
     this.favorites = [];
     this.commits = [];
-    this.buttonAllow = false;
     this.gutters = [];
 
-    // load heart image
-    this.heartImage = document.createElement('img');
-    this.heartImage.src = './assets/heart.png';
-
     this.isiPhone = navigator.userAgent.indexOf('iPhone') > -1;
-  }
-
-  deviceSwitch() {
-    this.buttonAllow = true;
-    this.nextAccess = true;
-    switch (this.deviceType) {
-      case 0:
-        break;
-      case 1:
-        this.config = {
-          width: 750,
-          height: 1334,
-          header: 128,
-          fontSize: 28,
-          lineHeight: 34,
-          commaSize: 33,
-          commaGutterBefore: 2,
-          commaGutterAfter: 15,
-          gutterHeight: 2,
-          gutterMarginTop: 32,
-          gutterFontSize: 40,
-          areaWidth: 608,
-          areaMarginLeft: 123,
-          areaMarginRight: 19,
-          areaMarginTop: 26,
-          areaMarginBottom: 30,
-          areaPaddingLeft: 20,
-          areaPaddingRight: 12,
-          areaPaddingTop: 1,
-          areaPaddingBottom: -33,
-          areaTriangleLeft: 20,
-          areaTriangleWidth: 24,
-          areaTriangleHeight: 10,
-          areaHeartWidth: 42,
-          areaHeartMarginTop: 11,
-          areaSeparatorMarginTop: 15,
-          areaSeparatorOffsetBottom: -13,
-          areaSeparatorHeight: 2,
-          areaSeparatorColors: ['#dddedf', '#f6f7f7'],
-          favoriteOnlyPaddingBottom: 48,
-          commitOffsetLeft: 4,
-          commitFirstLineOffset: -2,
-          commitLineHeight: 46,
-          commitSpaceWidth: 8,
-          colonSize: 30,
-          colonGutterBefore: 1,
-          colonGutterAfter: 8,
-          replyGutterBefore: 2,
-          replyGutterAfter: 2,
-        };
-        break;
-      case 2:
-        break;
-    }
+    this.language = 0;
   }
 
   prevStep(): void {
@@ -126,11 +68,7 @@ export class AppComponent {
         this.nextAccess = true;
         break;
       case 1:
-        if (isNullOrUndefined(this.deviceType)) {
-          alert('请选择一个设备');
-          this.prevStep();
-          return;
-        }
+        this.deviceSwitch();
         this.prevAccess = true;
         this.nextAccess = false;
         this.gutters = [];
@@ -157,6 +95,182 @@ export class AppComponent {
         }, 0);
         break;
     }
+  }
+
+  deviceSwitch() {
+    if (isNullOrUndefined(this.deviceType)) {
+      alert('请选择一个设备');
+      this.prevStep();
+      return;
+    }
+
+    switch (this.deviceType) {
+      case 0:
+        this.config = {
+          width: 640,
+          height: 1136,
+          devicePixelRatio: 2,
+          header: 128,
+          fontSize: 28,
+          lineHeight: 34,
+          commaSize: 33,
+          commaGutterBefore: 2,
+          commaGutterAfter: 15,
+          gutterHeight: 1,
+          gutterMarginTop: 32,
+          gutterFontSize: 40,
+          areaWidth: 500,
+          areaMarginLeft: 122,
+          areaMarginRight: 18,
+          areaMarginTop: 26,
+          areaMarginBottom: 30,
+          areaPaddingLeft: 16,
+          areaPaddingRight: 12,
+          areaPaddingTop: 1,
+          areaPaddingBottom: -33,
+          areaTriangleLeft: 20,
+          areaTriangleWidth: 24,
+          areaTriangleHeight: 10,
+          areaHeartSrc: './assets/heart@2x-small.png',
+          areaHeartWidth: 42,
+          areaSeparatorMarginTop: 15,
+          areaSeparatorOffsetBottom: -13,
+          areaSeparatorHeight: 2,
+          areaSeparatorColors: ['#dddedf', '#f6f7f7'],
+          favoriteOnlyPaddingBottom: 48,
+          commitOffsetLeft: 0,
+          commitFirstLineOffset: -2,
+          commitLineHeight: 46,
+          commitSpaceWidth: 8,
+          colonSize: 30,
+          colonGutterBefore: 1,
+          colonGutterAfter: 8,
+          replyText: '回复',
+          replyGutterBefore: 1,
+          replyGutterAfter: 2,
+        };
+        break;
+      case 1:
+        this.config = {
+          width: 750,
+          height: 1334,
+          devicePixelRatio: 2,
+          header: 128,
+          fontSize: 28,
+          lineHeight: 34,
+          commaSize: 33,
+          commaGutterBefore: 2,
+          commaGutterAfter: 15,
+          gutterHeight: 2,
+          gutterMarginTop: 32,
+          gutterFontSize: 40,
+          areaWidth: 608,
+          areaMarginLeft: 123,
+          areaMarginRight: 19,
+          areaMarginTop: 26,
+          areaMarginBottom: 30,
+          areaPaddingLeft: 20,
+          areaPaddingRight: 12,
+          areaPaddingTop: 1,
+          areaPaddingBottom: -33,
+          areaTriangleLeft: 20,
+          areaTriangleWidth: 24,
+          areaTriangleHeight: 10,
+          areaHeartSrc: './assets/heart@2x.png',
+          areaHeartWidth: 42,
+          areaSeparatorMarginTop: 15,
+          areaSeparatorOffsetBottom: -13,
+          areaSeparatorHeight: 2,
+          areaSeparatorColors: ['#dddedf', '#f6f7f7'],
+          favoriteOnlyPaddingBottom: 48,
+          commitOffsetLeft: 4,
+          commitFirstLineOffset: -2,
+          commitLineHeight: 46,
+          commitSpaceWidth: 8,
+          colonSize: 30,
+          colonGutterBefore: 1,
+          colonGutterAfter: 8,
+          replyText: '回复',
+          replyGutterBefore: 2,
+          replyGutterAfter: 2,
+        };
+        break;
+      case 2:
+        this.config = {
+          width: 1242,
+          height: 2208,
+          devicePixelRatio: 3,
+          header: 192,
+          fontSize: 42,
+          lineHeight: 52,
+          commaSize: 49,
+          commaGutterBefore: 4,
+          commaGutterAfter: 24,
+          gutterHeight: 2,
+          gutterMarginTop: 51,
+          gutterFontSize: 60,
+          areaWidth: 966,
+          areaMarginLeft: 217,
+          areaMarginRight: 59,
+          areaMarginTop: 39,
+          areaMarginBottom: 45,
+          areaPaddingLeft: 27,
+          areaPaddingRight: 22,
+          areaPaddingTop: 2,
+          areaPaddingBottom: -33,
+          areaTriangleLeft: 30,
+          areaTriangleWidth: 37,
+          areaTriangleHeight: 15,
+          areaHeartSrc: './assets/heart@3x.png',
+          areaHeartWidth: 63,
+          areaSeparatorMarginTop: 23,
+          areaSeparatorOffsetBottom: -15,
+          areaSeparatorHeight: 3,
+          areaSeparatorColors: ['#dddedf', '#f6f7f7', '#f6f7f7'],
+          favoriteOnlyPaddingBottom: 48,
+          commitOffsetLeft: 0,
+          commitFirstLineOffset: -2,
+          commitLineHeight: 64,
+          commitSpaceWidth: 12,
+          colonSize: 45,
+          colonGutterBefore: 1,
+          colonGutterAfter: 8,
+          replyText: '回复',
+          replyGutterBefore: 2,
+          replyGutterAfter: 2,
+        };
+        break;
+    }
+
+    if (this.language === 1) {
+      switch (this.deviceType) {
+        case 0:
+          Object.assign(this.config, {
+            replyText: '@',
+            replyGutterBefore: 9,
+            replyGutterAfter: 10,
+          });
+          break;
+        case 1:
+          Object.assign(this.config, {
+            replyText: '@',
+            replyGutterBefore: 9,
+            replyGutterAfter: 10,
+          });
+          break;
+        case 2:
+          Object.assign(this.config, {
+            replyText: '@',
+            replyGutterBefore: 9,
+            replyGutterAfter: 10,
+          });
+          break;
+      }
+    }
+
+    // load heart image
+    this.heartImage = document.createElement('img');
+    this.heartImage.src = this.config.areaHeartSrc;
   }
 
   uploadImage(files: FileList): void {
@@ -195,7 +309,7 @@ export class AppComponent {
     // find gutter and set to red
     for (let i = this.config.header; i < imageData.height - this.config.gutterHeight; i++) {
       const index = i * imageData.width * 4;
-      if (imageData.data[index] !== 255) {
+      if (Math.abs(imageData.data[index] - 255) > 3) {
         ctx.fillRect(0, i, this.config.width, this.config.gutterHeight);
         this.gutters.push(i);
         i += this.config.gutterHeight;
@@ -209,7 +323,7 @@ export class AppComponent {
     }
 
     if (this.gutters.length > 10) {
-      alert('不要拿不是朋友圈的截图糊弄我！');
+      alert('请选择有效的朋友圈截图');
       this.prevStep();
       return;
     }
@@ -290,9 +404,7 @@ export class AppComponent {
     this.currentBaseline = this.gutters[this.gutterIndex] - this.config.gutterMarginTop + this.config.areaMarginTop + this.config.areaPaddingTop + this.config.lineHeight;
 
     // draw heart
-    ctx.drawImage(this.heartImage,
-      this.config.areaMarginLeft + this.config.areaPaddingLeft,
-      this.gutters[this.gutterIndex] - this.config.gutterMarginTop + this.config.areaMarginTop + this.config.areaPaddingTop + this.config.areaHeartMarginTop);
+    ctx.drawImage(this.heartImage, this.config.areaMarginLeft, this.gutters[this.gutterIndex] - this.config.gutterMarginTop + this.config.areaMarginTop);
 
     // draw favorites
     this.favorites.forEach((item, index) => {
@@ -404,7 +516,7 @@ export class AppComponent {
 
         ctx.fillStyle = 'black';
         ctx.font = `${this.config.fontSize}px -apple-system`;
-        drawText('回复');
+        drawText(this.config.replyText);
 
         left += this.config.replyGutterAfter;
 

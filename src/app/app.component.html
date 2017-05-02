@@ -4,16 +4,29 @@
     <div [ngSwitch]="step" class="col-xs-12">
       <div *ngSwitchCase="0" class="welcome">
         <h1>朋友圈点赞评论截图生成工具</h1>
-        <ul *ngIf="isiPhone">
-          <li>请选择你所使用的 iPhone 型号</li>
-          <!--<li><label><input type="radio" name="device" [value]="0" (change)="deviceSwitch()" [(ngModel)]="deviceType" [disabled]="true">5 / 5c / 5s / SE (开发中)</label></li>-->
-          <li>
-            <label><input type="radio" name="device" [value]="1" (change)="deviceSwitch()" [(ngModel)]="deviceType">6 / 6s / 7</label>
-          </li>
-          <li>
-            <label><input type="radio" name="device" [value]="2" (change)="deviceSwitch()" [(ngModel)]="deviceType" [disabled]="true">6 / 6s / 7 Plus (开发中)</label>
-          </li>
-        </ul>
+        <div *ngIf="isiPhone">
+          <ul>
+            <li>请选择 iPhone 型号</li>
+            <li>
+              <label><input type="radio" name="device" [value]="0" [(ngModel)]="deviceType">5 / 5c / 5s / SE</label>
+            </li>
+            <li>
+              <label><input type="radio" name="device" [value]="1" [(ngModel)]="deviceType">6 / 6s / 7</label>
+            </li>
+            <li>
+              <label><input type="radio" name="device" [value]="2" [(ngModel)]="deviceType" [disabled]="true">6 / 6s / 7 Plus (开发中)</label>
+            </li>
+          </ul>
+          <ul>
+            <li>请选择微信语言</li>
+            <li>
+              <label><input type="radio" name="language" [value]="0" [(ngModel)]="language">中文</label>
+            </li>
+            <li>
+              <label><input type="radio" name="language" [value]="1" [(ngModel)]="language">英文</label>
+            </li>
+          </ul>
+        </div>
         <p *ngIf="!isiPhone" class="not-iphone">抱歉，该工具只支持iPhone</p>
         <p class="copyright">Made by Troy</p>
       </div>
@@ -21,7 +34,9 @@
         <p class="instruction">选择一个朋友圈的屏幕截图</p>
         <p>要求：</p>
         <ol>
-          <li>要修改的朋友圈内容必须和下一条朋友圈的分割线清晰可见</li>
+          <li>请选择朋友圈列表的屏幕截图，不要点入特定人的朋友圈</li>
+          <li>请确保截图中不包含个人封面图片</li>
+          <li>请确保要修改的朋友圈内容和下一条朋友圈的分割线清晰可见</li>
           <li>请确保增加完所需的内容后上述分割线仍在视野范围内，即所要操作的朋友圈应尽可能处于屏幕上方</li>
           <li>请确保所要操作的朋友圈不存在赞和评论</li>
         </ol>
@@ -36,7 +51,7 @@
       </div>
       <div *ngSwitchCase="2">
         <div class="row">
-          <canvas id="gutterCanvas" [width]="config.width" [height]="config.height"></canvas>
+          <canvas id="gutterCanvas" [width]="config.width" [height]="config.height" [style.width.px]="config.width/config.devicePixelRatio" [style.height.px]="config.height/config.devicePixelRatio"></canvas>
         </div>
         <p>请选择所需要编辑的朋友圈（取上下分割线之间的数字)</p>
         <form class="form-inline gutter-form">
@@ -85,14 +100,13 @@
         <div class="row">
           <p class="info">长按图片保存到相册</p>
           <p *ngIf="rendering">渲染中，请耐心等待</p>
-          <canvas id="renderCanvas" [width]="config.width" [height]="config.height" [hidden]="true"></canvas>
-          <img [width]="config.width" [height]="config.height">
-
+          <canvas id="renderCanvas" [width]="config.width" [height]="config.height" [style.width.px]="config.width/config.devicePixelRatio" [style.height.px]="config.height/config.devicePixelRatio" [hidden]="true"></canvas>
+          <img [width]="config.width" [height]="config.height" [style.width.px]="config.width/config.devicePixelRatio" [style.height.px]="config.height/config.devicePixelRatio">
         </div>
       </div>
     </div>
   </div>
-  <div class="btn-toolbar" [hidden]="buttonAllow">
+  <div class="btn-toolbar" [hidden]="!isiPhone">
     <button (click)="prevStep()" [disabled]="!prevAccess" class="btn btn-primary">上一步</button>
     <button (click)="nextStep()" [disabled]="!nextAccess" class="btn btn-primary">下一步</button>
   </div>
