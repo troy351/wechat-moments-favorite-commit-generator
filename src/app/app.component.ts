@@ -202,7 +202,7 @@ export class AppComponent {
           devicePixelRatio: 3,
           header: 192,
           fontSize: 42,
-          lineHeight: 52,
+          lineHeight: 51,
           commaSize: 49,
           commaGutterBefore: 4,
           commaGutterAfter: 24,
@@ -215,29 +215,29 @@ export class AppComponent {
           areaMarginTop: 39,
           areaMarginBottom: 45,
           areaPaddingLeft: 27,
-          areaPaddingRight: 22,
-          areaPaddingTop: 2,
-          areaPaddingBottom: -33,
+          areaPaddingRight: 25,
+          areaPaddingTop: 3,
+          areaPaddingBottom: -49,
           areaTriangleLeft: 30,
           areaTriangleWidth: 37,
           areaTriangleHeight: 15,
           areaHeartSrc: './assets/heart@3x.png',
           areaHeartWidth: 63,
-          areaSeparatorMarginTop: 23,
-          areaSeparatorOffsetBottom: -15,
+          areaSeparatorMarginTop: 24,
+          areaSeparatorOffsetBottom: -20,
           areaSeparatorHeight: 3,
           areaSeparatorColors: ['#dddedf', '#f6f7f7', '#f6f7f7'],
-          favoriteOnlyPaddingBottom: 48,
+          favoriteOnlyPaddingBottom: 73,
           commitOffsetLeft: 0,
-          commitFirstLineOffset: -2,
-          commitLineHeight: 64,
+          commitFirstLineOffset: -3,
+          commitLineHeight: 69,
           commitSpaceWidth: 12,
-          colonSize: 45,
-          colonGutterBefore: 1,
-          colonGutterAfter: 8,
+          colonSize: 46,
+          colonGutterBefore: 4,
+          colonGutterAfter: 11,
           replyText: '回复',
-          replyGutterBefore: 2,
-          replyGutterAfter: 2,
+          replyGutterBefore: 4,
+          replyGutterAfter: 3,
         };
         break;
     }
@@ -261,8 +261,8 @@ export class AppComponent {
         case 2:
           Object.assign(this.config, {
             replyText: '@',
-            replyGutterBefore: 9,
-            replyGutterAfter: 10,
+            replyGutterBefore: 13,
+            replyGutterAfter: 13,
           });
           break;
       }
@@ -330,7 +330,7 @@ export class AppComponent {
 
     ctx.font = `${this.config.gutterFontSize}px -apple-system`;
     // draw gutter number
-    this.gutters.forEach((n, i) => ctx.fillText((i + 1) + '', 10, n - 10));
+    this.gutters.forEach((n, i) => ctx.fillText((i + 1) + '', 10, n - 20));
   }
 
   private checkIfHasFavoriteAlready(): void {
